@@ -195,6 +195,7 @@ inject:
 
 inject_js:
   contents:
+  - url
   - jquery
   - annotator
   - output: scripts/hypothesis.min.js
