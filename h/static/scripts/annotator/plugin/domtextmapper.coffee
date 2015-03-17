@@ -1,7 +1,10 @@
 # Simple IE autodetect function
+# See for example https://stackoverflow.com/questions/19999388/jquery-check-if-user-is-using-ie/21712356#21712356
 isIE = ->
   ua = window.navigator.userAgent
-  ua.indexOf("MSIE ") > 0 or ua.match /Trident.*rv\:11\./
+  ua.indexOf("MSIE ") > 0 or      # for IE <=10
+    ua.indexOf('Trident/') > 0 or # for IE 11
+    ua.indexOf('Edge/') > 0       # for IE 12
 
 # Annotator plugin providing dom-text-mapper
 class Annotator.Plugin.DomTextMapper extends Annotator.Plugin
