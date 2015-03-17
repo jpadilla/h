@@ -1,8 +1,7 @@
 # Simple IE autodetect function
 isIE = ->
   ua = window.navigator.userAgent
-  msie = ua.indexOf "MSIE "
-  msie > 0
+  ua.indexOf("MSIE ") > 0 or ua.match /Trident.*rv\:11\./
 
 # Annotator plugin providing dom-text-mapper
 class Annotator.Plugin.DomTextMapper extends Annotator.Plugin
