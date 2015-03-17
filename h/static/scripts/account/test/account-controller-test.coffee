@@ -6,8 +6,8 @@ sinon.assert.expose assert, prefix: null
 
 describe 'h:AccountController', ->
   $scope = null
-  fakeFlash = null
   fakeSession = null
+  fakeToastr = null
   fakeIdentity = null
   fakeFormHelpers = null
   fakeAuth = null
@@ -26,7 +26,11 @@ describe 'h:AccountController', ->
   beforeEach module ($provide, $filterProvider) ->
     sandbox = sinon.sandbox.create()
     fakeSession = {}
-    fakeFlash = sandbox.spy()
+    fakeToastr =
+      success: sandbox.spy()
+      info: sandbox.spy()
+      warning: sandbox.spy()
+      error: sandbox.spy()
     fakeIdentity =
       logout: sandbox.spy()
     fakeFormHelpers =
@@ -38,7 +42,7 @@ describe 'h:AccountController', ->
       sandbox.stub().returns('STUBBED_PERSONA_FILTER')
 
     $provide.value 'session', fakeSession
-    $provide.value 'flash', fakeFlash
+    $provide.value 'toastr', fakeToastr
     $provide.value 'identity', fakeIdentity
     $provide.value 'formHelpers', fakeFormHelpers
     $provide.value 'auth', fakeAuth
@@ -109,7 +113,7 @@ describe 'h:AccountController', ->
       assert.calledWith fakeFormHelpers.applyValidationErrors, fakeForm,
         pwd: 'this is wrong'
 
-    it 'displays a flash message on success', ->
+    it 'displays a toast message on success', ->
       fakeForm = createFakeForm()
 
       # Resolve the request.
@@ -120,11 +124,9 @@ describe 'h:AccountController', ->
       controller = createController()
       $scope.submit(fakeForm)
 
-      assert.calledWith(fakeFlash, 'success', [
-        'Your profile has been updated.'
-      ])
+      assert.calledWith(fakeToastr.success, 'Your profile has been updated.')
 
-    it 'displays a flash message if a server error occurs', ->
+    it 'displays a toast message if a server error occurs', ->
       fakeForm = createFakeForm()
       controller = createController()
       $scope.submit(fakeForm)
@@ -136,9 +138,9 @@ describe 'h:AccountController', ->
           flash:
             error: ['Something bad happened']
 
-      assert.calledWith(fakeFlash, 'error', ['Something bad happened'])
+      assert.calledWith(fakeToastr.error, 'Something bad happened')
 
-    it 'displays a fallback flash message if none are present', ->
+    it 'displays a fallback toast message if none are present', ->
       fakeForm = createFakeForm()
       controller = createController()
       $scope.submit(fakeForm)
@@ -148,7 +150,8 @@ describe 'h:AccountController', ->
         status: 500
         data: {}
 
-      assert.calledWith(fakeFlash, 'error', 'Sorry, we were unable to perform your request')
+      assert.calledWith(fakeToastr.error,
+        'Sorry, we were unable to perform your request')
 
   describe '.delete', ->
     createFakeForm = (overrides={}) ->
@@ -205,7 +208,7 @@ describe 'h:AccountController', ->
       assert.calledWith fakeFormHelpers.applyValidationErrors, fakeForm,
         pwd: 'this is wrong'
 
-    it 'displays a flash message if a server error occurs', ->
+    it 'displays a toast message if a server error occurs', ->
       fakeForm = createFakeForm()
       controller = createController()
       $scope.delete(fakeForm)
@@ -217,9 +220,9 @@ describe 'h:AccountController', ->
           flash:
             error: ['Something bad happened']
 
-      assert.calledWith(fakeFlash, 'error', ['Something bad happened'])
+      assert.calledWith(fakeToastr.error, 'Something bad happened')
 
-    it 'displays a fallback flash message if none are present', ->
+    it 'displays a fallback toast message if none are present', ->
       fakeForm = createFakeForm()
       controller = createController()
       $scope.delete(fakeForm)
@@ -229,4 +232,5 @@ describe 'h:AccountController', ->
         status: 500
         data: {}
 
-      assert.calledWith(fakeFlash, 'error', 'Sorry, we were unable to perform your request')
+      assert.calledWith(fakeToastr.error,
+        'Sorry, we were unable to perform your request')

@@ -40,8 +40,8 @@ class SessionProvider
   #   });
   ###
   $get: [
-    '$document', '$http', '$q', '$resource', 'flash', 'xsrf',
-    ($document,   $http,   $q,   $resource,   flash,   xsrf) ->
+    '$document', '$http', '$q', '$resource', 'toastr', 'xsrf',
+    ($document,   $http,   $q,   $resource,   toastr,   xsrf) ->
       actions = {}
       provider = this
 
@@ -58,9 +58,10 @@ class SessionProvider
         model.errors = data.errors
         model.reason = data.reason
 
-        # Fire flash messages.
+        # Fire toast messages.
         for q, msgs of data.flash
-          flash q, msgs
+          for m in msgs
+            toastr[q](m)
 
         xsrf.token = model.csrf
 

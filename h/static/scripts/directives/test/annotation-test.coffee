@@ -14,13 +14,13 @@ describe 'h.directives.annotation', ->
   fakeAnnotationUI = null
   fakeAuth = null
   fakeDrafts = null
-  fakeFlash = null
   fakeMomentFilter = null
   fakePermissions = null
   fakePersonaFilter = null
   fakeStore = null
   fakeTagHelpers = null
   fakeTimeHelpers = null
+  fakeToastr = null
   fakeUrlEncodeFilter = null
   sandbox = null
 
@@ -48,7 +48,6 @@ describe 'h.directives.annotation', ->
       add: sandbox.stub()
       remove: sandbox.stub()
     }
-    fakeFlash = sandbox.stub()
 
     fakeMomentFilter = sandbox.stub().returns('ages ago')
     fakePermissions = {
@@ -67,19 +66,20 @@ describe 'h.directives.annotation', ->
       toFuzzyString: sandbox.stub().returns('a while ago')
       nextFuzzyUpdate: sandbox.stub().returns(30)
     }
+    fakeToastr = sandbox.stub()
     fakeUrlEncodeFilter = (v) -> encodeURIComponent(v)
 
     $provide.value 'annotationMapper', fakeAnnotationMapper
     $provide.value 'annotationUI', fakeAnnotationUI
     $provide.value 'auth', fakeAuth
     $provide.value 'drafts', fakeDrafts
-    $provide.value 'flash', fakeFlash
     $provide.value 'momentFilter', fakeMomentFilter
     $provide.value 'permissions', fakePermissions
     $provide.value 'personaFilter', fakePersonaFilter
     $provide.value 'store', fakeStore
     $provide.value 'tagHelpers', fakeTagHelpers
     $provide.value 'timeHelpers', fakeTimeHelpers
+    $provide.value 'toastr', fakeToastr
     $provide.value 'urlencodeFilter', fakeUrlEncodeFilter
     return
 

@@ -30,10 +30,10 @@ validate = (value) ->
 ###
 AnnotationController = [
   '$scope', '$timeout', '$q', '$rootScope', '$document',
-  'auth', 'drafts', 'flash', 'permissions', 'tagHelpers',
+  'auth', 'drafts', 'permissions', 'tagHelpers', 'toastr'
   'timeHelpers', 'annotationUI', 'annotationMapper'
   ($scope,   $timeout,   $q,   $rootScope,   $document,
-   auth,   drafts,   flash,   permissions,   tagHelpers,
+   auth,   drafts,   permissions,   tagHelpers,   toastr,
    timeHelpers, annotationUI, annotationMapper) ->
 
     @annotation = {}
@@ -151,9 +151,9 @@ AnnotationController = [
     ###
     this.save = ->
       unless model.user or model.deleted
-        return flash 'info', 'Please sign in to save your annotations.'
+        return toastr.info('Please sign in to save your annotations.')
       unless validate(@annotation)
-        return flash 'info', 'Please add text or a tag before publishing.'
+        return toastr.info('Please add text or a tag before publishing.')
 
       # Update stored tags with the new tags of this annotation
       tags = @annotation.tags.filter (tag) ->

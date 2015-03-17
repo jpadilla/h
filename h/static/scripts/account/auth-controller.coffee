@@ -1,6 +1,6 @@
 class AuthController
-  this.$inject = ['$scope', '$timeout', 'flash', 'session', 'formHelpers']
-  constructor:   ( $scope,   $timeout,   flash,   session,   formHelpers ) ->
+  this.$inject = ['$scope', '$timeout', 'session', 'toastr', 'formHelpers']
+  constructor:   ( $scope,   $timeout,   session,   toastr,   formHelpers ) ->
     timeout = null
 
     success = (data) ->
@@ -48,8 +48,9 @@ class AuthController
         timeout = $timeout ->
           angular.copy {}, $scope.model
           $scope.form?.$setPristine()
-          flash 'info',
+          toastr.info(
             'For your security, the forms have been reset due to inactivity.'
+          )
         , 300000
 
 

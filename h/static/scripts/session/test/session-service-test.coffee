@@ -5,8 +5,8 @@ sinon.assert.expose assert, prefix: null
 
 
 describe 'h.session', ->
-  fakeFlash = null
   fakeDocument = null
+  fakeToastr = null
   fakeXsrf = null
   sandbox = null
 
@@ -19,12 +19,12 @@ describe 'h.session', ->
   beforeEach module ($provide, sessionProvider) ->
     sandbox = sinon.sandbox.create()
 
-    fakeFlash = sandbox.spy()
+    fakeToastr = error: sandbox.spy()
     fakeDocument = {prop: -> '/session'}
     fakeXsrf = {token: 'faketoken'}
 
     $provide.value '$document', fakeDocument
-    $provide.value 'flash', fakeFlash
+    $provide.value 'toastr', fakeToastr
     $provide.value 'xsrf', fakeXsrf
 
     sessionProvider.actions =
@@ -53,14 +53,14 @@ describe 'h.session', ->
         result = session.login(code: 123)
         $httpBackend.flush()
 
-      it 'should invoke the flash service with any flash messages', ->
+      it 'should invoke the toastr service with any flash messages', ->
         response =
           flash:
-            error: 'fail'
+            error: ['fail']
         $httpBackend.expectPOST(url).respond(response)
         result = session.login({})
         $httpBackend.flush()
-        assert.calledWith fakeFlash, 'error', 'fail'
+        assert.calledWith fakeToastr.error, 'fail'
 
       it 'should assign errors and status reasons to the model', ->
         response =

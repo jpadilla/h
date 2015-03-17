@@ -1,16 +1,17 @@
 class AccountController
   @inject = [  '$scope', '$filter',
-               'auth', 'flash', 'formHelpers', 'identity', 'session']
+               'auth', 'formHelpers', 'identity', 'session', 'toastr']
   constructor: ($scope,   $filter,
-                auth,   flash,   formHelpers,   identity,   session) ->
+                auth,   formHelpers,   identity,   session,   toastr ) ->
     persona_filter = $filter('persona')
     $scope.subscriptionDescription =
       reply: 'Someone replies to one of my annotations'
 
     onSuccess = (form, response) ->
-      # Fire flash messages.
+      # Fire toast messages.
       for type, msgs of response.flash
-        flash(type, msgs)
+        for m in msgs
+          toastr[type](m)
 
       form.$setPristine()
       formModel = form.$name.slice(0, -4)
@@ -26,9 +27,11 @@ class AccountController
         formHelpers.applyValidationErrors(form, response.data.errors)
       else
         if response.data.flash
-          flash(type, msgs) for own type, msgs of response.data.flash
+          for own type, msgs of response.data.flash
+            for m in msgs
+              toastr[type](m)
         else
-          flash('error', 'Sorry, we were unable to perform your request')
+          toastr.error('Sorry, we were unable to perform your request')
 
       $scope.$broadcast 'formState', form.$name, ''  # Update status btn
 

@@ -81,15 +81,15 @@ configure = [
     ]
 
     identityProvider.forgetAuthentication = [
-      '$q', 'flash', 'session',
-      ($q,   flash,   session) ->
+      '$q', 'session', 'toastr'
+      ($q,   session,   toastr) ->
         session.logout({}).$promise
         .then ->
           authCheck = $q.defer()
           authCheck.reject 'no session'
           return null
         .catch (err) ->
-          flash 'error', 'Sign out failed!'
+          toastr.error('Sign out failed!')
           throw err
     ]
 

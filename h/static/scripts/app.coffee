@@ -11,6 +11,7 @@ imports = [
   'ngRoute'
   'ngSanitize'
   'ngTagsInput'
+  'toastr'
   'h.helpers'
   'h.identity'
   'h.session'
@@ -124,7 +125,6 @@ require('./annotation-mapper-service')
 require('./annotation-ui-service')
 require('./auth-service')
 require('./cross-frame-service')
-require('./flash-service')
 require('./permissions-service')
 require('./local-storage-service')
 require('./store-service')
